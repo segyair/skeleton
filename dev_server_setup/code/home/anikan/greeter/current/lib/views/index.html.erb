@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Greeter</title>
+    <link rel="stylesheet" href="/stylesheets/application.css" type="text/css" charset="utf-8">
+    <style type="text/css" media="screen">
+      body {
+        background-color: #4B7399;
+        font-family: Verdana;
+        font-size: 14px;
+      }
+      #container {
+        width: 75%;
+        margin: 0 auto;
+        background-color: #FFF;
+        padding: 20px 40px;
+        border: solid 1px black;
+        margin-top: 20px;
+      }
+      a { color: #0000FF; }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h1>Hello <%= greet_name %>!</h1>
+      <form method="post" action="/change">
+        <input name="name" type="text">
+        <input type="submit" value="Change Name">
+      </form>
+      <h3>Browse <a target="_blank" href="http://<%= host_ip %>:9192/api/v1/greeters">here</a> to see all greeters</h3>
+    </div>
+  </body>
+</html>

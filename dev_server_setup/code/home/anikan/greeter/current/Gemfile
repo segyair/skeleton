@@ -1,0 +1,12 @@
+source 'https://rubygems.org'
+
+# rack - minimal, modular, and adaptable interface for developing web applications in Ruby.
+gem 'rack',  '>=1.6.4'
+
+# puma - simple, fast, threaded, and highly concurrent HTTP 1.1 server for Ruby/Rack applications.
+gem 'puma',  '>=3.2.0'
+
+gem 'rake'
+gem 'grape'
+gem 'activerecord'
+gem 'mysql2'      # requires: sudo yum install mysql-devel -y

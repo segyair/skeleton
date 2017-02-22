@@ -1,0 +1,11 @@
+#require "bundler/gem_tasks"
+$: << File.expand_path("../lib",__FILE__)
+
+require 'greeter'
+
+namespace :db do
+  desc "run migration"
+  task :migrate do
+    ActiveRecord::Migrator.migrate File.expand_path("../lib/db/migrate", __FILE__)
+  end
+end

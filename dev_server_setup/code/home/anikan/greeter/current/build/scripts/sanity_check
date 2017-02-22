@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+Dir.chdir(File.expand_path("..",__FILE__)) do
+  require 'bundler/setup'
+end
+
+require 'httparty'
+
+def failed(msg)
+  puts "ERROR Sanity failed!"
+  puts msg
+  exit 1
+end
+
+# Wait for greeter to start listening on ports 9292 and 445
+timeout = 10
+for i in 1..timeout
+  puts "check that greeter is listening on ports 445 and 9292"
+  `netstat -an | awk 'BEGIN {c=2} 
+                      / 0.0.0.0:445 .* LISTEN /  {c-=1}
+                      / 0.0.0.0:9292 .* LISTEN / {c-=1}
+                      END {exit c}'`
+  break if $?.exitstatus.zero?
+  sleep 2
+end
+
+res = HTTParty.get('https://localhost:445/monitor', verify: false)
+failed("Could not get monitor on port 445") unless res.code.equal? 200
+failed("Monitor did not return UP") unless res.parsed_response == "UP"
+puts "Sanity checked!"

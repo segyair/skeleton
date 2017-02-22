@@ -1,0 +1,10 @@
+cd $(dirname "${BASH_SOURCE[0]}")/..
+
+PORT=$1
+if [ -z "$PORT" ];then
+  PORT=9292
+fi
+
+exec bundle exec rackup -s Puma -p $PORT
+
+cd -

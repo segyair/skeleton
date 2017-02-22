@@ -1,0 +1,46 @@
+Name: <%= cfg[:package_name] %>
+Version: <%= cfg[:version] %>
+Release: <%= cfg[:release] %>
+Summary: <%= cfg[:summary] %>
+BuildRoot:  <%= cfg[:buildroot] %>
+License: none
+AutoReqProv: no
+Vendor: Yair
+
+%description
+<%= cfg[:description] %>
+
+%pre
+#check nginx
+if [ ! -x /usr/sbin/nginx ]; then
+  echo "ERROR. Must have executable nginx in /usr/local/nginx/nginx"
+  exit 1
+fi
+
+su - anikan -c "gem install bundle"
+
+%post
+echo "-- post started"
+sudo chown -R anikan:anikan /home/anikan/greeter
+su - anikan -c "mkdir -p /home/anikan/greeter/shared/{logs,config,nginx/logs}"
+su - anikan -c "cd /home/anikan/greeter/current/; bundle install"
+su - anikan -c "cd /home/anikan/greeter/current/; bundle exec ruby build/scripts/create_db.rb"
+su - anikan -c "cd /home/anikan/greeter/current/; rake db:migrate"
+cp /home/anikan/greeter/current/build/upstart/* /etc/init/
+
+initctl start greeter
+echo "-- post finished."
+echo "-- browse to http://`curl -s http://169.254.169.254/latest/meta-data/public-ipv4`:9192/index.html"
+
+%define _unpackaged_files_terminate_build 0
+
+%files
+%defattr(-,<%= cfg[:user] %>,<%= cfg[:group] %>,-)
+
+<% cfg[:dirs].each do |d| %>
+<%= "%dir #{d}" %>
+<% end %>
+
+<% cfg[:files].each do |f| %>
+<%= f %>
+<% end %>
