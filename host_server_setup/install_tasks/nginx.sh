@@ -9,8 +9,8 @@ else
   echo "nginx is up"  
 fi
 
-if [`curl http://127.0.0.1:5000/hello` -ne "Hello, World!”]; then
-  echo “dendron is down!”
+if [`curl http://127.0.0.1:8080/hello` -ne "Hello, World!”]; then
+  echo “app is down!”
 else
-  echo “dendron is up”
+  echo “app is up”
 fi
